@@ -93,7 +93,7 @@
                 android:layout_weight="45">
 
                 <ImageView
-                    android:id="@+id/imageViewDrink"
+                    android:id="@+id/imageViewBack"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="start"
@@ -102,7 +102,7 @@
                     app:srcCompat="@drawable/drink_icone" />
 
                 <ImageView
-                    android:id="@+id/imageViewStarter"
+                    android:id="@+id/imageViewNext"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center_horizontal"

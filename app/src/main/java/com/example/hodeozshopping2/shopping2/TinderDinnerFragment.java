@@ -27,7 +27,11 @@ public class TinderDinnerFragment extends Fragment {
     private ArrayList<CardItem> cardItemsP;
     private int currentPosition;
 
-    int e1Max, e2Max, e3Max, e4Max, e5Max, e6Max, e7Max, e8Max, e1, e2, e3, e4, e5, e6, e7, e8;
+    ImageView imageViewBack, imageViewNext;
+
+    int e1Max, e2, e3, e4, e5, e6, e7, e8;
+    int e2Counter, e2Max;
+
     int e1Counter = 0;
     Communicator comm;
 
@@ -52,11 +56,29 @@ public class TinderDinnerFragment extends Fragment {
         comm = (Communicator) getActivity();
         iswitchFragments = (IswitchFragments) getActivity();
 
+        //Boutons pour revenir au type de repas précent ou passer au suivant
+        imageViewBack = getActivity().findViewById(R.id.imageViewBack);
+        imageViewNext = getActivity().findViewById(R.id.imageViewNext);
+        imageViewBack.setImageResource(R.drawable.menu_icone_non_grise);
+        imageViewNext.setImageResource(R.drawable.drink_icone);
+        /*imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                iswitchFragments.switchFragment(IswitchFragments.ID.FRAG6);
+            }
+        });*/
+        imageViewNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                iswitchFragments.switchFragment(IswitchFragments.ID.FRAG2);
+            }
+        });
+
+        //Boutons swipe
         nonSwipe = getActivity().findViewById(R.id.non);
         ouiSwipe = getActivity().findViewById(R.id.oui);
-        filtersButton = getActivity().findViewById(R.id.filters);
-
-
         nonSwipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +86,6 @@ public class TinderDinnerFragment extends Fragment {
                 cardStack.swipeTopViewToLeft();
             }
         });
-
         ouiSwipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +94,8 @@ public class TinderDinnerFragment extends Fragment {
             }
         });
 
+        //Bouton filtres
+        filtersButton = getActivity().findViewById(R.id.filters);
         filtersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,15 +114,22 @@ public class TinderDinnerFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tinder_dinner, container, false);
 
         Intent mIntent = getActivity().getIntent();
-        e1 = e1Max = mIntent.getIntExtra("e1", e1);
-        e2 = e2Max = mIntent.getIntExtra("e2", e2);
-        e3 = e3Max = mIntent.getIntExtra("e3", e3);
-        e4 = e4Max = mIntent.getIntExtra("e4", e4);
-        e5 = e5Max = mIntent.getIntExtra("e5", e5);
-        e6 = e6Max = mIntent.getIntExtra("e6", e6);
-        e7 = e7Max = mIntent.getIntExtra("e7", e7);
-        e8 = e8Max = mIntent.getIntExtra("e8", e8);
+        e1Max = mIntent.getIntExtra("e1", e1Max);
+        e2 = mIntent.getIntExtra("e2", e2);
+        e3 = mIntent.getIntExtra("e3", e3);
+        e4 = mIntent.getIntExtra("e4", e4);
+        e5 = mIntent.getIntExtra("e5", e5);
+        e6 = mIntent.getIntExtra("e6", e6);
+        e7 = mIntent.getIntExtra("e7", e7);
+        e8 = mIntent.getIntExtra("e8", e8);
 
+        FragmentManager fm = getFragmentManager();
+        TinderDrinkFragment tinderDrinkFragment = (TinderDrinkFragment) fm.findFragmentByTag("drinkFragment");
+
+        if (tinderDrinkFragment != null) {
+            e2Counter = tinderDrinkFragment.e2Counter;
+            e2Max = tinderDrinkFragment.e2Max;
+        }
 
         cardStack = v.findViewById(R.id.container);
 
@@ -129,16 +159,14 @@ public class TinderDinnerFragment extends Fragment {
                 currentPosition = position + 1;
                 cardStack.swipeTopViewToRight();
 
-                e1--;
                 e1Counter++;
                 comm.respond1("Dinner : " + e1Counter + "/" + e1Max);
 
-                //setTextLanguette();
 
-                if (e1 == 0 && e2 == 0 /*&& e3 == 0 && e4 == 0 && e5 == 0 && e6 == 0 && e7 == 0 && e8 == 0*/) {
+                if (e1Counter == e1Max && e2Counter == e2Max /*&& e3 == 0 && e4 == 0 && e5 == 0 && e6 == 0 && e7 == 0 && e8 == 0*/) {
                     goToNextActivity();
                 }
-                else if (e1 == 0 && e2 != 0) {
+                else if (e1Counter == e1Max && e2Counter != e2Max) {
                     goToDrinkFragment();
                 }
                 /*else if (e1 == 0 && e2 == 0 && e3 != 0) {
@@ -221,8 +249,6 @@ public class TinderDinnerFragment extends Fragment {
         startActivity(intent2);
     }
 
-
-    //private void setTextLanguette() {}
 
     private void setCardStackAdapterPirate() {
         cardItemsP = new ArrayList<>();

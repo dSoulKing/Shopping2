@@ -10,6 +10,8 @@ import android.os.Bundle;
 public class TinderActivity extends AppCompatActivity implements Communicator, IswitchFragments {
 
     int e1, e2, e3, e4, e5, e6, e7, e8;
+    int e1Max, e2Max;
+
     TinderDinnerFragment tinderDinnerFragment ;
     TinderDrinkFragment  tinderDrinkFragment  ;
 
@@ -32,52 +34,41 @@ public class TinderActivity extends AppCompatActivity implements Communicator, I
         e7 = mIntent.getIntExtra("e7", e7);
         e8 = mIntent.getIntExtra("e8", e8);
 
-        Bundle bundle = new Bundle();
-        bundle.putInt("e1", e1);
-        bundle.putInt("e2", e2);
-        bundle.putInt("e3", e3);
-        bundle.putInt("e4", e4);
-        bundle.putInt("e5", e5);
-        bundle.putInt("e6", e6);
-        bundle.putInt("e7", e7);
-        bundle.putInt("e8", e8);
+        e1Max = e1;
+        e2Max = e2;
 
-        /*TinderDinnerFragment tinderDinnerFragment = new TinderDinnerFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("e1", e1);
-        bundle.putInt("e2", e2);
-        bundle.putInt("e3", e3);
-        bundle.putInt("e4", e4);
-        bundle.putInt("e5", e5);
-        bundle.putInt("e6", e6);
-        bundle.putInt("e7", e7);
-        bundle.putInt("e8", e8);
-        tinderDinnerFragment.setArguments(bundle);
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        ft.add(R.id.container, tinderDinnerFragment, "dinnerFragment")
-          //.addToBackStack("dinnerFragment")
-          .commit();*/
+        //Initialisation des fragment swipe
         tinderDinnerFragment = new TinderDinnerFragment();
         tinderDrinkFragment = new TinderDrinkFragment();
 
+        //Lancement du premier fragment swipe
         switchFragment(ID.FRAG1);
 
-        FragmentManager fm2 = getFragmentManager();
-        FragmentTransaction ft2 = fm2.beginTransaction();
 
+        //Lancement de la languette résumer
+        setTongue();
+
+    }
+
+    public void setTongue (){
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("e1", e1);
+        bundle.putInt("e2", e2);
+        bundle.putInt("e3", e3);
+        bundle.putInt("e4", e4);
+        bundle.putInt("e5", e5);
+        bundle.putInt("e6", e6);
+        bundle.putInt("e7", e7);
+        bundle.putInt("e8", e8);
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
         TongueFragment tongueFragment = new TongueFragment();
         tongueFragment.setArguments(bundle);
-
-        ft2.add(R.id.containerTongue, tongueFragment)
-           //.addToBackStack("")
-           .commit();
-
-
-
+        ft.add(R.id.containerTongue, tongueFragment)
+                //.addToBackStack("")
+                .commit();
     }
 
     @Override
@@ -118,12 +109,12 @@ public class TinderActivity extends AppCompatActivity implements Communicator, I
     }
 
 
-
     @Override
     public void switchFragment(ID id) {
         Bundle bundle = new Bundle();
         FragmentManager fm;
         FragmentTransaction ft;
+
         switch (id){
             case FRAG1:
 
@@ -142,13 +133,10 @@ public class TinderActivity extends AppCompatActivity implements Communicator, I
 
                 ft.replace(R.id.container, tinderDinnerFragment, "dinnerFragment")
                         .commit();
-                booleanTinder = false;
                 break;
 
             case FRAG2:
 
-
-                bundle = new Bundle();
                 bundle.putInt("e1", e1);
                 bundle.putInt("e2", e2);
                 bundle.putInt("e3", e3);
